@@ -72,7 +72,7 @@ class Regressione_Lineare:
         errore=np.mean( (target-predizione) ** 2)
         return errore
     
-    #qui calcoliamo la derivata di MSE a rispetto della nostra predizione e dopo aggiornamo il pesi di nostro modelo
+    #qui calcoliamo la derivata di MSE a rispetto della nostra predizione e dopo aggiornamo i pesi di nostro modelo
     def aggiornarePesi(self, predizione, target):
 
         # Calcolo del gradiente rispetto ai pesi
