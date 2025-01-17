@@ -11,7 +11,7 @@ class SVM:
         self.epochs=epochs
         self.lr=learning_rate
     
-    #calcola la misura della margine dall'iperpiano ai due vettori di supporto
+    #calcola la misura del margine
     def compute_margin(self):
         numerator=np.abs(np.dot(self.features, self.weights) + self.bias)
         denominator=np.linalg.norm(self.weights)
@@ -20,7 +20,17 @@ class SVM:
     
     #calcola l'iperpiano ottimale per aggiornare le features
     def fit(self):
-        pass
+        for epoch in range(self.epochs):
+            for i, x in enumerate(self.features):
+                condition=self.target[i] * (np.dot(x, self.weights) + self.bias) < 1
+                if condition:
+                    #Aggiornamento dei pesi e del bias per un punto mal classificato
+                    self.weights += self.lr * (self.targets[i] * x - 2 * (1/self.epochs) * self.weights)
+                    self.bias += self.lr * self.targets[i]
+                else:
+                    #Aggiornamento dei pesi solo con regolarizzazione
+                    self.weights -= self.lr * (2 * (1/self.epochs) * self.weights)
+
 
     #fa una previsione binaria, utilizzando la formula w*x+b
     def predict(self, value):

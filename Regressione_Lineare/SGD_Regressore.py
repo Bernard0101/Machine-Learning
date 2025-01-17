@@ -5,7 +5,7 @@ matplotlib.use('TkAgg')  # ou 'Qt5Agg'
 import matplotlib.pyplot as plt
 
 
-data=pd.read_csv("dataset_velocita.csv")
+data=pd.read_csv("Regressione_Lineare/dataset_velocita.csv")
 features=data[["Tempo (s)", "Velocita (m/s)"]].values
 labels=data["Distanza (m)"].values
 
