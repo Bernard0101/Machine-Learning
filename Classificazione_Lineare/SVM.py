@@ -2,6 +2,9 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
+
+
+
 class SVM:
     def __init__(self, features, targets, epochs, learning_rate):
         self.features=features
@@ -36,4 +39,8 @@ class SVM:
     def predict(self, value):
         prediction=np.sign(np.dot(value, self.weights) + self.bias)
         return prediction
+
+    #plotta alcuni relazioni interessanti nei dati
+    def plot_graphics(self):
+        
         

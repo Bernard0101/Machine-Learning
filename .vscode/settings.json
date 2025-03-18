@@ -1,0 +1,8 @@
+{
+    "python.analysis.extraPaths": [
+        "./Funzioni",
+        "./funzioni_utili",
+        "./Funzioni_utili",
+        "./Regressione_Lineare"
+    ]
+}
