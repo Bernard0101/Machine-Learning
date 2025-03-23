@@ -1,20 +1,37 @@
-import numpy as np
 import pandas as pd 
-import matplotlib 
-matplotlib.use('TkAgg')
-import matplotlib.pyplot as plt
+import numpy as np
 
+from Datasets import visualizzazione_dati
 from Regressione_Lineare import formula_chiusa
 from Regressione_Lineare import SGD_Regressore
-from Funzioni_utili import processore
+from Funzioni_ed_utensili import processore
+from Funzioni_ed_utensili import functions
+
+
+
 
 data=pd.read_csv("Datasets/Legge_di_Ohm.csv")
-f=data[["Corrente (Ampere)","Tensione (Volt)"]].values
-l=data["Resistenza (Ohm)"].values
+standard_data=functions.standartizzareData(df=data)
+f=standard_data[["Corrente (Ampere)"]].values
+l=standard_data["Tensione (Volt)"].values
+k_folds=5
 
 #organizzazione e visualizzazione dei dati e avaluazione dei risultati
-Reg_formula_chiusa=formula_chiusa.Regressione_Lineare(features=f, labels=l,)
-processore=processore.processore_dati(modello=Reg_formula_chiusa, dataset="Datasets/Legge_di_Ohm.csv")
-processore.standartizzareData()
-processore.cross_validation(K=5, features=Reg_formula_chiusa.features, labels=Reg_formula_chiusa.labels)
+SGD_reg=SGD_Regressore.Regressione_Lineare(features=f, labels=l, tassa_apprendimento=0.001, inputs=1, outputs=1, epochs=100)
+processore=processore.Processore_dati(modello=SGD_reg, dataset="Datasets/Legge_di_Ohm.csv")
+errore_fold, errore_alleno=processore.cross_validation(K=k_folds, features=f, labels=l)
 
+
+corrente=standard_data["Corrente (Ampere)"].values
+tensione=standard_data["Tensione (Volt)"].values
+corrente.sort()
+tensione.sort()
+pred_std=np.std(SGD_reg.predizioni)
+pred_mean=np.mean(SGD_reg.predizioni)
+pred_denormalizzata=functions.denormalizzareData(pred=SGD_reg.predizioni, mean=pred_mean, std=pred_std)
+
+
+visualizzazione_dati.relazione_voltaggio_corrente(x=corrente, y=tensione)
+visualizzazione_dati.Progresso_modello(x=np.arange(0, len(SGD_reg.errori), 1), y=SGD_reg.errori)
+visualizzazione_dati.cross_validation_analise(K=k_folds, perdita=errore_alleno)
+visualizzazione_dati.Comparazione_predizioni(x=corrente, y=tensione, preds=SGD_reg.predizioni)

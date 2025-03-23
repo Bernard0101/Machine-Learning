@@ -1,7 +1,6 @@
 import numpy as np
 
 
-    
 #ReLU function ativazione
 def activation_ReLU(Z):
     return np.maximum(0, Z)
@@ -67,3 +66,19 @@ def Loss_Softmax(Z):
 def Loss_Softmax_derivative(Z):
     s = Loss_Softmax(Z).reshape(-1, 1) 
     return np.diagflat(s) - np.dot(s, s.T) 
+
+
+
+
+
+#funzione che scalabilizza i dati 
+def standartizzareData(df):
+    mean=df.mean()
+    std=df.std()
+    standard_data=(df - mean) / std
+    return standard_data
+
+
+def denormalizzareData(pred, mean, std):
+    data_normalizzata=pred * std + mean
+    return data_normalizzata

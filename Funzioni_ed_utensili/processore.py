@@ -1,10 +1,10 @@
-import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
+import numpy as np # type: ignore
+import pandas as pd # type: ignore
+import matplotlib.pyplot as plt # type: ignore
 
+from Funzioni_ed_utensili import functions
 
-
-class processore_dati:
+class Processore_dati:
 
     def __init__(self, modello, dataset):
         self.modello=modello
@@ -20,7 +20,8 @@ class processore_dati:
         return X_train, y_train, X_test, y_test
 
 
-    def cross_validation(self, K, features, labels):
+    def cross_validation(self, K, features, labels, funzione_costo="MSE"):
+        errore_fold=[]
 
         #crea un numero specifico che divide ugualmente tutti elementi dello dataset
         fold_size=len(features) // K
@@ -37,20 +38,21 @@ class processore_dati:
         #prendere la parte di test e training
         for i in range(K):
             print(f"\n\n\nalleno {i}:")
-            x_test, y_test=feature_folds[i], label_folds[i]
-            x_train=np.concatenate([feature_folds[j] for j in range(K) if j != i], axis=0)
-            y_train=np.concatenate([label_folds[j] for j in range(K) if j != i], axis=0)
+            x_train=np.concatenate(feature_folds, axis=0)
+            y_train=np.concatenate(label_folds, axis=0)
 
 
             self.modello.features=x_train
             self.modello.labels=y_train
-            self.modello.allenare()
+            errore=self.modello.allenare(inizializzazione="Xavier")
+            errore_fold.append(errore)
+
+        errore_totale=np.mean(np.concatenate(errore_fold))
+        errore_per_alleno=np.abs(np.sum(errore_fold, axis=1))
+        print(f"\nerrore totale medio nell'apprendimento: {errore_totale}")
+        return errore_fold, errore_per_alleno
+
+
+        
             
 
-    def standartizzareData(self):
-        mean=np.mean(self.dataset, axis=0)
-        deviation=np.std(self.dataset, axis=0)
-        standardize=(self.dataset-mean) / deviation
-        standardized_df=pd.DataFrame(standardize, columns=self.dataset.columns)
-        self.modello.dataset=standardized_df
-        return standardized_df
