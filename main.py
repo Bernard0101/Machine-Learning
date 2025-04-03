@@ -16,7 +16,7 @@ l=standard_data["Tensione (Volt)"].values
 k_folds=5
 
 #organizzazione e visualizzazione dei dati e avaluazione dei risultati
-SGD_reg=SGD_Regressore.Regressione_Lineare(features=f, labels=l, tassa_apprendimento=0.001, inputs=1, outputs=1, epochs=25)
+SGD_reg=SGD_Regressore.Regressione_Lineare(features=f, labels=l, tassa_apprendimento=0.001, inputs=1, outputs=1, epochs=25, funzione="MSE")
 processore=processore.Processore_dati(modello=SGD_reg, dataset="Datasets/Legge_di_Ohm.csv")
 errore_fold, errore_alleno=processore.cross_validation(K=k_folds, features=f, labels=l)
 

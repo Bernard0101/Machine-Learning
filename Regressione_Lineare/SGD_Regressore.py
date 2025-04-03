@@ -8,13 +8,14 @@ from Funzioni_ed_utensili import functions
 
 
 class Regressione_Lineare:
-    def __init__(self, features, labels, tassa_apprendimento, inputs, outputs, epochs=25):
+    def __init__(self, features, labels, tassa_apprendimento, inputs, outputs, epochs=25, funzione="MSE"):
         self.features=features
         self.labels=labels
         self.inputs=inputs
         self.outputs=outputs
         self.pesi=np.random.randn(inputs, 1)
         self.bias=np.random.randn(1) 
+        self.funzione=funzione
         self.tassa_appredimento=tassa_apprendimento
         self.epochs=epochs
         self.predizioni=None
@@ -71,7 +72,7 @@ class Regressione_Lineare:
         self.inizializzazione_pesi(init=inizializzazione)
         for epoch in range(self.epochs):
             preds=self.prevedere(X=self.features, alpha=0.01)   
-            errore=self.perdita(predizione=preds, target=self.labels, funzione="MSE")
+            errore=self.perdita(predizione=preds, target=self.labels, funzione=self.funzione)
             self.SGD_ottimizzatore(predizione=preds, target=self.labels)
             errori.append(errore)
             if epoch % 5 == 0 :
