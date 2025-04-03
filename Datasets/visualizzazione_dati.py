@@ -24,7 +24,7 @@ def Progresso_modello(x, y):
 
 
 
-def cross_validation_analise(K, perdita, PMA):
+def cross_validation_analise(K, perdita):
     K_folder=np.arange(0, K, 1)
     plt.figure(figsize=(10, 6))
     plt.bar(x=K_folder, height=perdita, color="royalblue", edgecolor="black")

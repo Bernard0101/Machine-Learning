@@ -36,7 +36,7 @@ def Loss_MSE(y_pred, y_label):
     return np.mean((y_pred-y_label)**2)
     
 def Loss_MSE_derivative(y_pred, y_label):
-    return 2 * (y_pred-y_label) / len(y_label)
+    return 2 * (y_pred-y_label) #/ len(y_label)
 
 #MAE Loss
 def Loss_MAE(y_pred, y_label):

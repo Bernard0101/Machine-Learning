@@ -35,25 +35,44 @@ class Regressione_Lineare:
         predizione=np.dot(X, self.pesi) + self.bias
         return predizione
 
+    def perdita(self, predizione, target, funzione="MSE"):
+        if funzione == "MAE":
+            MAE=functions.Loss_MAE(y_pred=predizione, y_label=target)
+            return MAE
+        if funzione == "MSE":
+            MSE=functions.Loss_MSE(y_pred=predizione, y_label=target)
+            return MSE
+        
     #funzione che implementa l'agoritmo di SGD per addestramento dei pesi
-    def SGD_ottimizzatore(self, predizione, target, funzione="MSE"):
-        errore=(predizione - target.reshape(-1, 1))
-        
-        gradiente_pesi=np.dot(self.features.T, errore) / len(self.labels)
+    def SGD_ottimizzatore(self, predizione, target):
 
-        self.pesi -= self.tassa_appredimento * gradiente_pesi
-        self.bias -= self.tassa_appredimento * np.mean(errore)
+        #mescolare il dataset
+        ordine=np.arange(len(self.labels))
+        np.random.shuffle(ordine)
+
+        #ottenere l'errore del modello per ogni batch del dataset
+        for batch in range(len(ordine)): 
+            batch_pred=predizione[ordine[batch]]
+            batch_target=target[ordine[batch]]
+
+            #calcolare la derivata della funzione di costo rispetto al batch di predizione e target
+            errore_batch=functions.Loss_MSE_derivative(y_pred=batch_pred, y_label=batch_target)
+            gradiente_peso_batch=errore_batch * self.features[ordine[batch]]
+            gradiente_bias_batch=errore_batch
+
+            self.pesi -= self.tassa_appredimento * gradiente_peso_batch
+            self.bias -= self.tassa_appredimento * gradiente_bias_batch
+            
         
-        MSE_loss=functions.Loss_MSE(y_pred=predizione, y_label=target)
-        return MSE_loss
     
     #loop di allenamento per diminuire la perdita a ogni epoca
     def allenare(self, inizializzazione="He"):
         errori=[]
         self.inizializzazione_pesi(init=inizializzazione)
         for epoch in range(self.epochs):
-            preds=self.prevedere(X=self.features, alpha=0.01)            
-            errore=self.SGD_ottimizzatore(predizione=preds, target=self.labels)
+            preds=self.prevedere(X=self.features, alpha=0.01)   
+            errore=self.perdita(predizione=preds, target=self.labels, funzione="MSE")
+            self.SGD_ottimizzatore(predizione=preds, target=self.labels)
             errori.append(errore)
             if epoch % 5 == 0 :
                 print(f"epoch: {epoch}| errore: {errore}")
