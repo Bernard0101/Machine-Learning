@@ -38,7 +38,7 @@ def cross_validation_analise(K, perdita):
 def Comparazione_predizioni(x, y, preds):
     plt.figure(figsize=(10, 6))
     plt.scatter(x, y, label="dati sperimentali", c="darkorange")
-    plt.plot(x, preds, label="Regressione Lineare", c="mediumturquoise", linewidth=2)
+    plt.plot(x[:96], preds, label="Regressione Lineare", c="mediumturquoise", linewidth=2)
     plt.title("Regressione Lineare tra Tensione e Corrente")
     plt.xlabel("corrente (Ampere)")
     plt.ylabel("Voltaggio (Volt)")

@@ -78,7 +78,13 @@ def standartizzareData(df):
     standard_data=(df - mean) / std
     return standard_data
 
+def denormalizzaData(standard_data, colonna):
+    mean=colonna.mean()
+    std=colonna.std()
+    denormalized_data=standard_data * std + mean
+    return denormalized_data
 
-def denormalizzareData(pred, mean, std):
+
+def denormalizzarePredizione(pred, mean, std):
     data_normalizzata=pred * std + mean
     return data_normalizzata

@@ -31,7 +31,7 @@ class Processore_dati:
         np.random.shuffle(indices)
         features, labels=np.array(features[indices]), np.array(labels[indices])
 
-        #crea una lista dove ogni elemento di essa e un altra lista contenente fold size elementi 
+        #crea una lista dove ogni elemento di essa e un'altra lista contenente fold size elementi 
         feature_folds=[features[i*fold_size:fold_size*(i+1)]for i in range(K)]
         label_folds=[labels[i*fold_size:fold_size*(i+1)]for i in range(K)]
 
