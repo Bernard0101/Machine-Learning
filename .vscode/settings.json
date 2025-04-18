@@ -4,5 +4,10 @@
         "./funzioni_utili",
         "./Funzioni_utili",
         "./Regressione_Lineare"
-    ]
+    ],
+    "python.testing.pytestArgs": [
+        "Regressione_Lineare"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true
 }

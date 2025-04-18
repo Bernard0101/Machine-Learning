@@ -39,11 +39,8 @@ class Processore_dati:
 
         #prendere la parte di test e training
         for i in range(K):
-            print(f"\n\n\nalleno {i}:")
             x_train=np.concatenate(feature_folds, axis=0)
             y_train=np.concatenate(label_folds, axis=0)
-            print(len(x_train))
-            print(len(y_train))
 
             self.modello.features=x_train
             self.modello.labels=y_train
@@ -53,7 +50,6 @@ class Processore_dati:
 
         errore_totale=np.mean(np.concatenate(errore_fold))
         errore_per_alleno=np.abs(np.sum(errore_fold, axis=1))
-        print(f"\nerrore totale medio nell'apprendimento: {errore_totale}")
         return errore_fold, errore_per_alleno, ordine
 
 

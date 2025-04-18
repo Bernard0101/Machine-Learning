@@ -13,7 +13,7 @@ class Regressione_Lineare:
         self.labels=labels
         self.inputs=inputs
         self.outputs=outputs
-        self.pesi=np.random.randn(inputs, 1)
+        self.pesi=np.random.randn(inputs, outputs)
         self.bias=np.random.randn(1) 
         self.funzione=funzione
         self.tassa_appredimento=tassa_apprendimento
@@ -30,9 +30,12 @@ class Regressione_Lineare:
         if init == "He":
             self.pesi *= init_He
             self.bias *= init_He
+    
 
 
     def prevedere(self, X, alpha=0.01):
+        if X.shape[1] != self.pesi.shape[0]:
+            raise ValueError(f"dimensioni disuguali tra features: {X.shape[1]}, pesi: {self.pesi.shape[1]}")
         predizione=np.dot(X, self.pesi) + self.bias
         return predizione
 
@@ -60,7 +63,12 @@ class Regressione_Lineare:
             errore_batch=functions.Loss_MSE_derivative(y_pred=batch_pred, y_label=batch_target)
             gradiente_peso_batch=errore_batch * self.features[ordine[batch]]
             gradiente_bias_batch=errore_batch
-
+            
+            #condizione per reshape i gradiente per eseguire la moltiplicazione matriciale
+            if(self.outputs == 1):
+                gradiente_peso_batch=gradiente_peso_batch.reshape(-1, 1)
+                
+            #addestramento dei pesi e bias
             self.pesi -= self.tassa_appredimento * gradiente_peso_batch
             self.bias -= self.tassa_appredimento * gradiente_bias_batch
             
@@ -75,7 +83,7 @@ class Regressione_Lineare:
             errore=self.perdita(predizione=preds, target=self.labels, funzione=self.funzione)
             self.SGD_ottimizzatore(predizione=preds, target=self.labels)
             errori.append(errore)
-            if epoch % 5 == 0 :
+            if epoch % 5 == 0:
                 print(f"epoch: {epoch}| errore: {errore}")
         self.predizioni=preds
         self.errori=errori

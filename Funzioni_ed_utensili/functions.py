@@ -85,6 +85,8 @@ def denormalizzaData(standard_data, colonna):
     return denormalized_data
 
 
-def denormalizzarePredizione(pred, mean, std):
+def denormalizzarePredizione(pred, target):
+    mean=target.mean()
+    std=target.std()
     data_normalizzata=pred * std + mean
     return data_normalizzata
