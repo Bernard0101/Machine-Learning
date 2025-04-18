@@ -13,11 +13,11 @@ std_data=functions.standartizzareData(df=data)
 delta_T=np.array(std_data["Temperatura_Finale (C)"] - std_data["Temperatura_Iniziale (C)"].values)
 std_features=np.expand_dims(delta_T, axis=1)
 std_targets=std_data["Allungamento (m)"].values
-k_folds=10
+k_folds=5
 
 
 #alleno del modello sul dataset utilizzando la metrica di cross validation
-SGD_reg=SGD_Regressore.Regressione_Lineare(features=std_features, labels=std_targets, tassa_apprendimento=0.0003, inputs=1, outputs=1, epochs=150, funzione="MSE")
+SGD_reg=SGD_Regressore.Regressione_Lineare(features=std_features, labels=std_targets, tassa_apprendimento=0.003, inputs=1, outputs=1, epochs=50, funzione="MSE")
 processore=processore.Processore_dati(modello=SGD_reg, dataset=data_path)
 errore_fold, errore_alleno, ordine=processore.cross_validation(K=k_folds, features=std_features, labels=std_targets)
 
